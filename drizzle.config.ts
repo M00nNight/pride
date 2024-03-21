@@ -8,8 +8,8 @@ if (!process.env.DATABASE_URL) {
 }
 
 export default {
-  schema: "./src/app/lib/supabase/schema.ts",
-  out: "./migration",
+  schema: "./src/lib/supabase/schema.ts",
+  out: "./migrations",
   driver: "pg",
   dbCredentials: {
     connectionString: process.env.DATABASE_URL || "",
