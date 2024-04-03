@@ -61,3 +61,8 @@
     transform: translateX(-100%);
   }
 }
+@layer utilities {
+  .border-washed-purple-300 {
+    border-color: #c7d2fe; /* This color is a washed version of Tailwind CSS's purple-300 (#9F7AEA) */
+  }
+}
