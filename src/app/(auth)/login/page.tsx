@@ -5,7 +5,21 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormSchema } from "@/lib/types";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import Logo from "../../../../public/pridelogo.svg";
+import Link from "next/link";
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/ui/Loader";
+import { actionLoginUser } from "@/lib/server-action/auth-actions";
 
 function LoginPage() {
   const router = useRouter();
@@ -18,7 +32,14 @@ function LoginPage() {
   const isLoading = form.formState.isSubmitting;
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (
     formData
-  ) => {};
+  ) => {
+    const { error } = await actionLoginUser(formData);
+    if (error) {
+      form.reset();
+      setSubmitError(error.message);
+    }
+    router.replace("/dashboard");
+  };
   return (
     <Form {...form}>
       <form
@@ -28,8 +49,56 @@ function LoginPage() {
         onSubmit={form.handleSubmit(onSubmit)}
         className=" w-full sm:justify-center sm:w-[400px] space-y-6 flex flex-col"
       >
-        {" "}
-        hello
+        <Link href="/" className=" w-full flex  justify-left items-center">
+          <Image src={Logo} alt="Pride Logo" width={50} height={50} />
+          <span className=" font-semibold dark:text-white text-4xl first-letter:ml-2">
+            pride.
+          </span>
+        </Link>
+        <FormDescription>
+          An all-In-One Collaboration and Productivity Tool
+        </FormDescription>
+        <FormField
+          disabled={isLoading}
+          control={form.control}
+          name="email"
+          render={(field) => (
+            <FormItem>
+              <FormControl>
+                <Input type="email" placeholder="Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={isLoading}
+          control={form.control}
+          name="password"
+          render={(field) => (
+            <FormItem>
+              <FormControl>
+                <Input type="Password" placeholder="Password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {submitError && <FormMessage>{submitError}</FormMessage>}
+        <Button
+          type="submit"
+          className=" w-full p-6"
+          size="lg"
+          disabled={isLoading}
+        >
+          {!isLoading ? "Login" : <Loader />}
+        </Button>
+        <span className="self-center">
+          Dont have an account?
+          <Link href="/signup" className="text-primary">
+            Sign Up
+          </Link>
+        </span>
       </form>
     </Form>
   );
