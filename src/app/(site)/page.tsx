@@ -52,7 +52,7 @@ function HomePage() {
             bg-background
         "
           >
-            Get Cypress Free
+            Get Pride Free
           </Button>
         </div>
         <div
